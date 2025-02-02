@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Form</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS (If needed) -->
+    <link rel="stylesheet" href="insurance.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="form-container">
+            <h2 class="text-center mb-4">Insurance Application Form</h2>
+            <form id="insurance-form">
+                <!-- Personal Information -->
+                <h5>Personal Information</h5>
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="fullName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" id="dob" required>
+                </div>
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select class="form-control" id="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="occupation" class="form-label">Occupation</label>
+                    <input type="text" class="form-control" id="occupation" required>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" required>
+                </div>
+
+                <!-- Medical History -->
+                <h5>Medical History</h5>
+                <div class="mb-3">
+                    <label for="preExistingConditions" class="form-label">Pre-existing Conditions</label>
+                    <input type="text" class="form-control" id="preExistingConditions">
+                </div>
+                <div class="mb-3">
+                    <label for="pastSurgeries" class="form-label">Past Surgeries</label>
+                    <input type="text" class="form-control" id="pastSurgeries">
+                </div>
+                <div class="mb-3">
+                    <label for="currentMedications" class="form-label">Current Medications</label>
+                    <input type="text" class="form-control" id="currentMedications">
+                </div>
+
+                <!-- Lifestyle Information -->
+                <h5>Lifestyle Information</h5>
+                <div class="mb-3">
+                    <label for="tobaccoUse" class="form-label">Tobacco Use</label>
+                    <input type="text" class="form-control" id="tobaccoUse">
+                </div>
+                <div class="mb-3">
+                    <label for="alcoholConsumption" class="form-label">Alcohol Consumption</label>
+                    <input type="text" class="form-control" id="alcoholConsumption">
+                </div>
+                <div class="mb-3">
+                    <label for="physicalActivity" class="form-label">Physical Activity Level</label>
+                    <input type="text" class="form-control" id="physicalActivity">
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary w-100">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Your details have been successfully shared with the insurance office. They will contact you shortly to share the cost and other details.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="insurance.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+/* Container for the option boxes */
+.btn-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Individual option box */
+.option-box {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #007bff;
+    border-radius: 15px;
+    margin: 15px;
+    background-color: aliceblue;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for option box */
+.option-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Image styling inside option box */
+.option-box img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+/* Title styling inside option box */
+.option-box h5 {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Description text styling inside option box */
+.option-box p {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* General page layout */
+body {
+    background-color: beige;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Center the text and make it responsive */
+.text-center {
+    text-align: center;
+}
+
+/* Styling for the heading */
+h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+/* Additional paragraph styling */
+.fs-4 {
+    font-size: 1.25rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}

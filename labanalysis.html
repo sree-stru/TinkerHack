@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CBC Report Analysis with Chatbot</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Style for the entire page */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fc;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 80%;
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 32px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 5px;
+      display: block;
+    }
+    input[type="number"], select {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+    }
+    input[type="number"]:focus, select:focus {
+      outline: none;
+      border-color: #4CAF50;
+      background-color: #eaf4e9;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: linear-gradient(135deg, #45a049, #4CAF50);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+    }
+    .results {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f2f2f2;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #333;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .results strong {
+      color: #e74c3c;
+    }
+    .results p {
+      margin: 10px 0;
+    }
+    .results .normal {
+      color: #2ecc71;
+    }
+    .recommendations {
+      background-color: #fff5e6;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+    }
+    .recommendations h3 {
+      color: #e67e22;
+    }
+    .recommendations p {
+      font-size: 16px;
+      color: #555;
+    }
+    .chart-container {
+      margin-top: 30px;
+      position: relative;
+      height: 400px;
+      width: 100%;
+    }
+    /* Chatbot Styles */
+    .chat-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 350px;
+      height: 400px;
+      background-color: #fff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-size: 18px;
+      border-radius: 12px 12px 0 0;
+    }
+    .chat-box {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background-color: #f9f9f9;
+      border-bottom: 2px solid #ccc;
+      border-radius: 0 0 12px 12px;
+    }
+    .chat-input {
+      padding: 10px;
+      font-size: 16px;
+      width: 100%;
+      border: none;
+      border-top: 2px solid #ccc;
+      border-radius: 0 0 12px 12px;
+    }
+    .chat-message {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      background-color: #4CAF50;
+      color: white;
+      max-width: 80%;
+    }
+    .user-message {
+      background-color: #ddd;
+      color: #333;
+      align-self: flex-end;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>CBC Report Input</h2>
+    
+    <!-- Input Form for CBC -->
+    <div class="form-group">
+      <label for="hemoglobin">Hemoglobin (g/dL):</label>
+      <input type="number" id="hemoglobin" step="0.1" placeholder="Enter Hemoglobin level">
+    </div>
+    <div class="form-group">
+      <label for="wbc">WBC Count (per µL):</label>
+      <input type="number" id="wbc" step="1000" placeholder="Enter WBC count">
+    </div>
+    <div class="form-group">
+      <label for="rbc">RBC Count (million/µL):</label>
+      <input type="number" id="rbc" step="0.01" placeholder="Enter RBC count">
+    </div>
+    <div class="form-group">
+      <label for="platelets">Platelet Count (per µL):</label>
+      <input type="number" id="platelets" step="1000" placeholder="Enter Platelet count">
+    </div>
+    <div class="form-group">
+      <label for="mcv">Mean Corpuscular Volume (fL):</label>
+      <input type="number" id="mcv" step="0.1" placeholder="Enter MCV">
+    </div>
+    <div class="form-group">
+      <label for="mch">Mean Corpuscular Hemoglobin (pg):</label>
+      <input type="number" id="mch" step="0.1" placeholder="Enter MCH">
+    </div>
+    <div class="form-group">
+      <label for="neutrophils">Neutrophils (%):</label>
+      <input type="number" id="neutrophils" step="0.1" placeholder="Enter Neutrophils percentage">
+    </div>
+    
+    <button onclick="analyzeCBC()">Analyze Report</button>
+    
+    <div class="results" id="results"></div>
+    <div class="recommendations" id="recommendations"></div>
+    
+    <!-- Chart Container -->
+    <div class="chart-container" id="chart-container">
+      <canvas id="cbcChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Chatbot Interface -->
+  <div class="chat-container" id="chat-container">
+    <div class="chat-header">Chat with CBC Bot</div>
+    <div class="chat-box" id="chat-box">
+      <div class="chat-message">Hello! How can I assist you with your CBC report?</div>
+    </div>
+    <input type="text" class="chat-input" id="chat-input" placeholder="Ask me a question..." onkeyup="sendMessage(event)">
+  </div>
+
+  <script>
+    // Chatbot Functionality
+    function sendMessage(event) {
+      if (event.key === 'Enter') {
+        const userInput = document.getElementById('chat-input').value.trim();
+        if (userInput) {
+          displayMessage(userInput, 'user');
+          processUserMessage(userInput);
+        }
+        document.getElementById('chat-input').value = '';
+      }
+    }
+
+    function displayMessage(message, sender) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('chat-message');
+      if (sender === 'user') {
+        messageDiv.classList.add('user-message');
+      }
+      messageDiv.innerText = message;
+      document.getElementById('chat-box').appendChild(messageDiv);
+      document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
+    }
+
+    function processUserMessage(message) {
+      let response = '';
+
+      // Check for keywords and provide relevant response
+      if (message.toLowerCase().includes('cbc') || message.toLowerCase().includes('report')) {
+        response = 'I can help you analyze your CBC report. Please provide your values for Hemoglobin, WBC, RBC, Platelets, MCV, MCH, and Neutrophils.';
+      } else if (message.toLowerCase().includes('abnormal')) {
+        response = 'If your results are abnormal, I suggest you consult with a specialist such as a hematologist or an infectious disease doctor depending on the values.';
+      } else if (message.toLowerCase().includes('hemoglobin')) {
+        response = 'Hemoglobin abnormalities can indicate anemia or other blood disorders. Check for normal ranges based on your age and gender.';
+      } else if (message.toLowerCase().includes('normal')) {
+        response = 'Normal ranges for CBC parameters are important for understanding your health. I can help analyze your report based on these values.';
+      } else {
+        response = 'I\'m not sure about that. Please ask about your CBC report or say "help" for assistance.';
+      }
+
+      displayMessage(response, 'bot');
+    }
+
+    // CBC Analysis function
+    function analyzeCBC() {
+      const hemoglobin = parseFloat(document.getElementById('hemoglobin').value);
+      const wbc = parseFloat(document.getElementById('wbc').value);
+      const rbc = parseFloat(document.getElementById('rbc').value);
+      const platelets = parseFloat(document.getElementById('platelets').value);
+      const mcv = parseFloat(document.getElementById('mcv').value);
+      const mch = parseFloat(document.getElementById('mch').value);
+      const neutrophils = parseFloat(document.getElementById('neutrophils').value);
+
+      let resultsText = '';
+      let recommendationsText = '';
+
+      // Normal ranges
+      const normalRanges = {
+        hemoglobin: { min: 12, max: 17 },
+        wbc: { min: 4500, max: 11000 },
+        rbc: { min: 4.2, max: 6.1 },
+        platelets: { min: 150000, max: 450000 },
+        mcv: { min: 80, max: 100 },
+        mch: { min: 27, max: 34 },
+        neutrophils: { min: 40, max: 70 }
+      };
+
+      // Color logic (green if normal, red if abnormal)
+      const colors = {
+        hemoglobin: (hemoglobin < normalRanges.hemoglobin.min || hemoglobin > normalRanges.hemoglobin.max) ? 'red' : 'green',
+        wbc: (wbc < normalRanges.wbc.min || wbc > normalRanges.wbc.max) ? 'red' : 'green',
+        rbc: (rbc < normalRanges.rbc.min || rbc > normalRanges.rbc.max) ? 'red' : 'green',
+        platelets: (platelets < normalRanges.platelets.min || platelets > normalRanges.platelets.max) ? 'red' : 'green',
+        mcv: (mcv < normalRanges.mcv.min || mcv > normalRanges.mcv.max) ? 'red' : 'green',
+        mch: (mch < normalRanges.mch.min || mch > normalRanges.mch.max) ? 'red' : 'green',
+        neutrophils: (neutrophils < normalRanges.neutrophils.min || neutrophils > normalRanges.neutrophils.max) ? 'red' : 'green'
+      };
+
+      // Results output text
+      if (hemoglobin < normalRanges.hemoglobin.min || hemoglobin > normalRanges.hemoglobin.max) {
+        resultsText += `<strong>Hemoglobin Abnormal:</strong> Value outside normal range. Possible anemia or polycythemia.<br>`;
+        recommendationsText += `<p><strong>Recommendation:</strong> Consult a hematologist for further evaluation and consider iron studies, B12/folate tests.</p>`;
+      }
+
+      if (wbc < normalRanges.wbc.min || wbc > normalRanges.wbc.max) {
+        resultsText += `<strong>WBC Count Abnormal:</strong> Possible infection, inflammation, or leukemia.<br>`;
+        recommendationsText += `<p><strong>Recommendation:</strong> Follow up with an infectious disease specialist or oncologist.</p>`;
+      }
+
+      if (rbc < normalRanges.rbc.min || rbc > normalRanges.rbc.max) {
+        resultsText += `<strong>RBC Count Abnormal:</strong> Possible anemia or polycythemia.<br>`;
+        recommendationsText += `<p><strong>Recommendation:</strong> Additional tests for anemia or polycythemia should be considered.</p>`;
+      }
+
+      if (platelets < normalRanges.platelets.min || platelets > normalRanges.platelets.max) {
+        resultsText += `<strong>Platelet Count Abnormal:</strong> Possible bleeding disorder or thrombocytosis.<br>`;
+        recommendationsText += `<p><strong>Recommendation:</strong> Consult a hematologist for a detailed evaluation of platelet function.</p>`;
+      }
+
+      if (mcv < normalRanges.mcv.min || mcv > normalRanges.mcv.max) {
+        resultsText += `<strong>MCV Abnormal:</strong> Possible macrocytic or microcytic anemia.<br>`;
+        recommendationsText += `<p><strong>Recommendation:</strong> Consider vitamin B12 or folate deficiency tests.</p>`;
+      }
+
+      if (mch < normalRanges.mch.min || mch > normalRanges.mch.max) {
+        resultsText += `<strong>MCH Abnormal:</strong> Possible hypochromic anemia.<br>`;
+        recommendationsText += `<p><strong>Recommendation:</strong> Check for iron deficiency or thalassemia.</p>`;
+      }
+
+      if (neutrophils < normalRanges.neutrophils.min || neutrophils > normalRanges.neutrophils.max) {
+        resultsText += `<strong>Neutrophils Abnormal:</strong> Possible infection or immune system issues.<br>`;
+        recommendationsText += `<p><strong>Recommendation:</strong> Follow up with an infectious disease specialist or immunologist.</p>`;
+      }
+
+      if (resultsText === '') {
+        resultsText = '<p class="normal"><strong>No abnormalities detected in your CBC report.</strong></p>';
+      }
+
+      document.getElementById('results').innerHTML = resultsText;
+      document.getElementById('recommendations').innerHTML = recommendationsText;
+
+      // Create the chart
+      createChart(hemoglobin, wbc, rbc, platelets, mcv, mch, neutrophils, colors);
+    }
+
+    function createChart(hemoglobin, wbc, rbc, platelets, mcv, mch, neutrophils, colors) {
+      const ctx = document.getElementById('cbcChart').getContext('2d');
+      const cbcChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Hemoglobin', 'WBC Count', 'RBC Count', 'Platelet Count', 'MCV', 'MCH', 'Neutrophils'],
+          datasets: [{
+            label: 'Your CBC Results',
+            data: [hemoglobin, wbc, rbc, platelets, mcv, mch, neutrophils],
+            backgroundColor: [
+              colors.hemoglobin, colors.wbc, colors.rbc, colors.platelets, colors.mcv, colors.mch, colors.neutrophils
+            ],
+            borderColor: [
+              colors.hemoglobin, colors.wbc, colors.rbc, colors.platelets, colors.mcv, colors.mch, colors.neutrophils
+            ],
+            borderWidth: 1
+          }, {
+            label: 'Normal Ranges',
+            data: [15, 7500, 5, 300000, 90, 30, 55], // Example normal range values for demonstration
+            backgroundColor: 'rgba(0, 123, 255, 0.2)',
+            borderColor: '#007bff',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          animation: {
+            duration: 1000,
+            easing: 'easeOutBounce'
+          },
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Value'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top'
+            }
+          }
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
