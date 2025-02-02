@@ -32,7 +32,7 @@ Project Documentation
 For Software:
 Screenshots (Add at least 3)
 ![Screenshot 2025-02-02 104944](https://github.com/user-attachments/assets/2dbf5f11-1e6d-4a09-a4a8-36374924a4cd)
-![Screenshot 2025-02-02 104944](https://github.com/user-attachments/assets/03b17180-59ea-49cf-8fb5-a09f0842944d)
+![Screenshot 2025-02-02 105047](https://github.com/user-attachments/assets/bd2c0455-af04-4ecb-bc40-70bb69b10538)
 
 ![Screenshot 2025-02-02 105106](https://github.com/user-attachments/assets/a9076509-ab4a-4cd7-8543-fe59b8b63330)
 Diagrams
